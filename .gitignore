@@ -1,0 +1,17 @@
+# Virtual environment
+venv/
+.venv/
+
+# Local databases
+instance/
+*.db
+
+# Secrets
+.env
+
+# Python
+__pycache__/
+*.pyc
+
+# Editor
+.vscode/
