@@ -9,13 +9,13 @@ def serialize_order(order):
         "id": order.id,
         "user_id": order.user_id,
         "status": order.status,
-        "total_price": order.total_price,
+        "total_price": str(order.total_price),
         "created_at": order.created_at.isoformat(),
         "items": [
             {
                 "product_id": item.product_id,
                 "quantity": item.quantity,
-                "price_at_purchase": item.price_at_purchase
+                "price_at_purchase": str(item.price_at_purchase),
             }
             for item in order.items
         ]
