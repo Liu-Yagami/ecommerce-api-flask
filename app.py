@@ -11,7 +11,6 @@ from routes.users import users_bp
 from routes.products import products_bp
 from routes.carts import carts_bp
 from routes.orders import orders_bp
-from routes.wishlists import wishlists_bp
 
 load_dotenv()
 
@@ -44,7 +43,6 @@ app.register_blueprint(users_bp)
 app.register_blueprint(products_bp)
 app.register_blueprint(carts_bp)
 app.register_blueprint(orders_bp)
-app.register_blueprint(wishlists_bp)
 
 
 @app.errorhandler(404)

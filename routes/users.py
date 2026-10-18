@@ -157,3 +157,18 @@ def add_to_wishlist(user_id):
     db.session.commit()
 
     return jsonify({"message": "Product added to wishlist", "wishlist_item_id": new_wishlist_item.id}), 201
+
+@users_bp.route("/users/<int:user_id>/wishlist/<int:product_id>", methods=["DELETE"])
+@jwt_required()
+def remove_from_wishlist(user_id, product_id):
+    denied = forbid_unless_owner(user_id)
+    if denied:
+        return denied
+
+    item = Wishlist.query.filter_by(user_id=user_id, product_id=product_id).first()
+    if not item:
+        return jsonify({"error": "Product not in wishlist"}), 404
+
+    db.session.delete(item)
+    db.session.commit()
+    return jsonify({"message": "Removed from wishlist"}), 200
