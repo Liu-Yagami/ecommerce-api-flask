@@ -25,6 +25,19 @@ app.config['JWT_SECRET_KEY'] = os.environ['JWT_SECRET_KEY']
 db.init_app(app)
 migrate.init_app(app, db)
 jwt.init_app(app)
+
+@jwt.unauthorized_loader
+def missing_token(reason):
+    return jsonify({"error": "Authentication required"}), 401
+
+@jwt.invalid_token_loader
+def invalid_token(reason):
+    return jsonify({"error": "Invalid token"}), 401
+
+@jwt.expired_token_loader
+def expired_token(jwt_header, jwt_payload):
+    return jsonify({"error": "Token has expired"}), 401
+
 ma.init_app(app)
 
 app.register_blueprint(users_bp)
