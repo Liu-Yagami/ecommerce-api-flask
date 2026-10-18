@@ -45,15 +45,6 @@ app.register_blueprint(carts_bp)
 app.register_blueprint(orders_bp)
 
 
-@app.errorhandler(404)
-def not_found(e):
-    return jsonify({"error": "Resource not found"}), 404
-
-
-@app.errorhandler(400)
-def bad_request(e):
-    return jsonify({"error": "Bad request"}), 400
-
 
 @app.errorhandler(IntegrityError)
 def handle_integrity_error(e):
@@ -75,6 +66,10 @@ def handle_validation_error(e):
 def handle_unexpected_error(e):
     if isinstance(e, HTTPException):
         return jsonify({"error": e.description}), e.code
+
+    db.session.rollback()
+    app.logger.error(f"Unhandled exception: {e}")
+    return jsonify({"error": "An unexpected error occurred"}), 500
 
     db.session.rollback()
     app.logger.error(f"Unhandled exception: {e}")

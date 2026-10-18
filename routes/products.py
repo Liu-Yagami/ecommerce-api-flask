@@ -3,6 +3,7 @@ from marshmallow import ValidationError
 from extensions import db
 from models import Product
 from schemas import product_schema, products_schema
+from flask_jwt_extended import jwt_required
 
 products_bp = Blueprint("products", __name__)
 
@@ -19,6 +20,7 @@ def get_product(product_id):
     return jsonify(product_schema.dump(product)), 200
 
 @products_bp.route("/products", methods=["POST"])
+@jwt_required()
 def create_product():
     data = product_schema.load(request.get_json())  
 
@@ -29,6 +31,7 @@ def create_product():
     return jsonify({"message": "Product created successfully", "product_id": new_product.id}), 201
 
 @products_bp.route("/products/<int:product_id>", methods=["PUT"])
+@jwt_required()
 def update_product(product_id):
     product = Product.query.get(product_id)
     if not product:
@@ -47,6 +50,7 @@ def update_product(product_id):
     return jsonify({"message": "Product updated successfully"}), 200
 
 @products_bp.route("/products/<int:product_id>", methods=["DELETE"])
+@jwt_required()
 def delete_product(product_id):
     product = Product.query.get(product_id)
     if not product:
